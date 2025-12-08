@@ -1,0 +1,135 @@
+﻿<UserControl x:Class="AB_EIP.View.DataObject"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AB_EIP.View"
+             xmlns:vm="clr-namespace:AB_EIP.MainViewModel"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="630">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/StatusBarResource.xaml"/>                <!-- Merge the StatusBarResource.xaml into your UserControl resources -->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <UserControl.DataContext>
+        <vm:DataObjViewModel/>        <!--Setting DataContext-->
+    </UserControl.DataContext>
+
+
+    <Grid Background="#F0F0F0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>            <!--Label Row-->
+            <RowDefinition Height="Auto"/>            <!--Action Row-->
+            <RowDefinition Height="*"/>               <!--Data Grid-->
+            <RowDefinition Height="Auto"/>            <!--Button Row-->
+            <RowDefinition Height="Auto"/>            <!--Status Bar-->
+        </Grid.RowDefinitions>
+
+        <!--Label-->
+        <Label Name="LblObj" Grid.Row="0" Content="Object Configuration" HorizontalAlignment="Center"
+               FontWeight="Bold" FontFamily="Segou UI" FontSize="14"/>
+
+        <!-- Buttons for adding and deleting rows -->
+        <GroupBox Grid.Row="1" Header="Action" BorderBrush="Gray" BorderThickness="0.5">
+            <Grid Margin="2">
+                <Button Content="Add Row" Width="70" Height="25" HorizontalAlignment="Left" Margin="0,0,0,0" Command="{Binding AddRowCommand}" Style="{StaticResource Win11ButtonStyle}" ToolTip="Click to add a new row in the table."/>
+                <Button Content="Delete Row" Width="70" Height="25" HorizontalAlignment="Left" Margin="90,0,0,0" Command="{Binding DeleteRowCommand}" Style="{StaticResource Win11ButtonStyle}" ToolTip="Click to delete the selected row from the table."/>
+                <Button Content="Database" Width="70" Height="25" HorizontalAlignment="Left" Margin="180,0,0,0" Command="{Binding DatabaseCommand}" Style="{StaticResource Win11ButtonStyle}" ToolTip="Click to create a custom database."/>
+                <Button Content="Import" Width="70" Height="25" HorizontalAlignment="Right" Margin="0,0,90,0" Command="{Binding ImportCommand}" Style="{StaticResource Win11ButtonStyle}" ToolTip="Click to import database in .XML format."/>
+                <Button Content="Export" Width="70" Height="25" HorizontalAlignment="Right" Margin="0,0,0,0" Command="{Binding ExportCommand}" Style="{StaticResource Win11ButtonStyle}" ToolTip="Click to export the table in .XML format."/>
+            </Grid>
+        </GroupBox>
+
+        <!-- DataGrid for displaying data -->
+        <DataGrid x:Name="DataObjGrid" Grid.Row="2" Style="{StaticResource DataGridStyle}"
+            ItemsSource="{Binding DataObjs}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" SelectionMode="Extended">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Sr.No" Width="Auto" Binding="{Binding SerialNo, Mode=TwoWay}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="PointName" Width="250" Binding="{Binding PointName}"/>
+                <DataGridComboBoxColumn Header="Commands" Width="100" SelectedItemBinding="{Binding Commands, Mode=TwoWay}">
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding DataContext.CommandsItems, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding DataContext.CommandsItems, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridComboBoxColumn Header="DataType" Width="100" SelectedItemBinding="{Binding DataType, Mode=TwoWay}" Selector.IsSelected="True">
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding DataContext.DataTypeItems, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding DataContext.DataTypeItems, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridComboBoxColumn Header="FileType" Width="100" SelectedItemBinding="{Binding FileType, Mode=TwoWay}">
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding DataContext.FileTypeItems, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding DataContext.FileTypeItems, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridTextColumn Header="Element" Width="Auto" Binding="{Binding Element, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="File" Width="50" Binding="{Binding File, Mode=TwoWay}"/>
+                <DataGridComboBoxColumn Header="Bit" Width="100" SelectedItemBinding="{Binding BitType, Mode=TwoWay}">
+                    <DataGridComboBoxColumn.ElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding DataContext.BitItems, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.ElementStyle>
+                    <DataGridComboBoxColumn.EditingElementStyle>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="ItemsSource" Value="{Binding DataContext.BitItems, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                        </Style>
+                    </DataGridComboBoxColumn.EditingElementStyle>
+                </DataGridComboBoxColumn>
+                <DataGridTextColumn Header="Deadband" Width="Auto" Binding="{Binding Deadband, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Value" Width="50" Binding="{Binding Value, Mode=TwoWay}"/>
+                <DataGridTextColumn Header="Description" Width="*" Binding="{Binding Description}"/>
+            </DataGrid.Columns>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+
+        <!--Button Row-->
+        <GroupBox Grid.Row="3" Margin="0,0,0,4" BorderBrush="Gray" BorderThickness="0.5">
+            <Grid Margin="0,0,0,0">
+                <Button Name="BtnHelp" Content="Help" Style="{StaticResource HelpButtonStyle}"
+                        HorizontalAlignment="Left" Width="70" Height="25" Margin="0,3,0,0" 
+                        ToolTip="Click to open the user-manual."
+                        CommandParameter="Protocol_Simulator_UserManual_v1.0.0_07062024.pdf|54"/>                <!--Open UserManual content related to this page.-->
+
+                <Button Name="BtnApply" Content="Apply" Style="{StaticResource Win11ButtonStyle}"
+                        HorizontalAlignment="Right" Width="70" Height="25" Margin="0,3,90,0"
+                        Command="{Binding ApplyCommand}" ToolTip="Click to create and load the database from the table."/>
+                <Button Name="BtnClearAll" Content="Clear All" Style="{StaticResource Win11ButtonStyle}"
+                        HorizontalAlignment="Right" Width="70" Height="25" Margin="0,3,0,0"
+                        Command="{Binding ClearCommand}" ToolTip="Click to remove all rows from the table."/>
+            </Grid>
+        </GroupBox>
+
+        <!--Status Bar-->
+        <StatusBar Template="{StaticResource StatusBarTemplate}" Grid.Row="4"/>
+    </Grid>
+</UserControl>
